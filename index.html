@@ -3,14 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Tengo una pregunta 💌</title>
+<title>Nueva misión disponible</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
   :root {
-    --fondo: #fde8ee;
-    --tarjeta: #ffffff;
-    --vino: #a3294a;
-    --verde: #2fb344;
-    --rojo: #e03131;
+    --noche: #17112e;
+    --panel: #241b4a;
+    --borde: #f5f0ff;
+    --rosa: #ff5d8f;
+    --amarillo: #ffd23f;
+    --verde: #3ddc84;
+    --sombra: #0b0718;
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; }
@@ -19,125 +24,135 @@
     display: grid;
     place-items: center;
     padding: 16px;
-    background: radial-gradient(circle at 50% 30%, #fff5f8, var(--fondo));
-    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
-    color: var(--vino);
+    background: var(--noche);
+    font-family: "Press Start 2P", "Courier New", monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--borde);
     overflow: hidden;
     -webkit-tap-highlight-color: transparent;
   }
-  .tarjeta {
-    width: min(420px, 100%);
-    background: var(--tarjeta);
-    border-radius: 18px;
-    padding: 32px 24px 28px;
-    text-align: center;
-    box-shadow: 0 12px 40px rgba(163, 41, 74, .18);
+  .estrella {
+    position: fixed;
+    width: 3px;
+    height: 3px;
+    background: var(--borde);
+    animation: titilar 2.4s steps(2) infinite;
   }
-  h1 {
-    margin: 0 0 20px;
-    font-size: clamp(1.4rem, 6vw, 1.8rem);
-    line-height: 1.25;
+  @keyframes titilar { 50% { opacity: .15; } }
+
+  .pantalla {
+    position: relative;
+    width: min(440px, 100%);
+    display: grid;
+    gap: 14px;
   }
-  .dibujo {
-    width: 170px;
-    max-width: 60%;
-    border-radius: 12px;
+  .caja {
+    background: var(--panel);
+    border: 4px solid var(--borde);
+    box-shadow: 6px 6px 0 var(--sombra);
+    padding: 16px;
+  }
+  .escena { text-align: center; padding-top: 20px; }
+  .etiqueta { color: var(--amarillo); font-size: 10px; margin: 0 0 18px; }
+  .corazon-grande {
+    width: 112px;
+    margin: 0 auto 20px;
     display: block;
-    margin: 0 auto 24px;
+    animation: flotar 1s steps(2) infinite;
   }
-  .botones {
+  @keyframes flotar { 50% { transform: translateY(-6px); } }
+
+  .barra-titulo {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    margin-bottom: 6px;
+  }
+  .barra {
+    height: 16px;
+    border: 3px solid var(--borde);
+    background: var(--sombra);
+  }
+  #excusas {
+    height: 100%;
+    width: 100%;
+    background: var(--rosa);
+    transition: width .3s steps(6);
+  }
+
+  #dialogo { margin: 0; min-height: 7.2em; }
+  #dialogo::after {
+    content: "▼";
+    color: var(--amarillo);
+    margin-left: 6px;
+    animation: titilar 1s steps(2) infinite;
+  }
+
+  .menu {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 18px;
-    min-height: 52px;
+    gap: 22px;
+    min-height: 76px;
   }
   button {
-    border: 0;
-    border-radius: 999px;
-    padding: 12px 26px;
     font: inherit;
-    font-weight: 700;
-    font-size: 1rem;
-    color: #fff;
+    font-size: 13px;
+    color: var(--sombra);
+    border: 4px solid var(--sombra);
+    outline: 3px solid var(--borde);
+    padding: 12px 20px;
     cursor: pointer;
     touch-action: manipulation;
     user-select: none;
   }
-  #si {
-    background: var(--verde);
-    box-shadow: 0 4px 0 #23882f;
-    transition: transform .25s ease;
-  }
-  #si:active { box-shadow: 0 1px 0 #23882f; }
+  #si { background: var(--verde); transition: transform .2s steps(3); }
+  #si:active { transform: translateY(3px); }
   #no {
-    background: var(--rojo);
-    box-shadow: 0 4px 0 #a61e1e;
-    transition: left .22s ease-out, top .22s ease-out;
+    background: var(--rosa);
+    transition: left .2s steps(5), top .2s steps(5);
     z-index: 10;
   }
-  #frase {
-    margin: 18px 0 0;
-    min-height: 1.4em;
-    font-size: .95rem;
-  }
-  #final h1 { margin-bottom: 12px; }
-  #final p { margin: 0; font-size: 1.05rem; line-height: 1.5; }
-  .corazon {
+  #no.rendido { background: var(--verde); }
+
+  #final { text-align: center; padding: 28px 16px; }
+  #final h1 { font-size: 16px; color: var(--amarillo); margin: 0 0 16px; line-height: 1.6; }
+  #final .premio { color: var(--verde); margin: 0 0 18px; }
+  #final p { margin: 0; }
+
+  .lluvia {
     position: fixed;
     top: -40px;
     pointer-events: none;
     animation: caer linear forwards;
   }
-  @keyframes caer {
-    to { transform: translateY(110vh) rotate(360deg); opacity: .2; }
-  }
+  @keyframes caer { to { transform: translateY(115vh); } }
 </style>
 </head>
 <body>
 
-<main class="tarjeta">
-  <section id="pregunta">
-    <h1 id="titulo"></h1>
-
-    <!-- Para usar tu propia imagen o GIF, cambia este <svg> por: <img class="dibujo" src="tu-imagen.gif" alt=""> -->
-    <svg class="dibujo" viewBox="0 0 200 200" role="img" aria-label="Un osito y un panda juntos">
-      <rect width="200" height="200" fill="#c9b6f2"/>
-      <!-- osito -->
-      <circle cx="42" cy="78" r="15" fill="#c98a56"/>
-      <circle cx="98" cy="78" r="15" fill="#c98a56"/>
-      <circle cx="70" cy="112" r="42" fill="#d9a06c"/>
-      <ellipse cx="70" cy="124" rx="17" ry="13" fill="#f6dcc0"/>
-      <circle cx="55" cy="106" r="4.5" fill="#3a2a22"/>
-      <circle cx="85" cy="106" r="4.5" fill="#3a2a22"/>
-      <ellipse cx="70" cy="118" rx="5" ry="3.5" fill="#3a2a22"/>
-      <path d="M63 126 q7 7 14 0" fill="none" stroke="#3a2a22" stroke-width="2.5" stroke-linecap="round"/>
-      <circle cx="46" cy="120" r="6" fill="#f59ab0" opacity=".7"/>
-      <!-- panda -->
-      <circle cx="108" cy="80" r="15" fill="#3a2a22"/>
-      <circle cx="164" cy="80" r="15" fill="#3a2a22"/>
-      <circle cx="136" cy="114" r="42" fill="#ffffff"/>
-      <ellipse cx="121" cy="108" rx="9" ry="11" fill="#3a2a22"/>
-      <ellipse cx="151" cy="108" rx="9" ry="11" fill="#3a2a22"/>
-      <circle cx="122" cy="107" r="3" fill="#fff"/>
-      <circle cx="150" cy="107" r="3" fill="#fff"/>
-      <ellipse cx="136" cy="121" rx="4.5" ry="3" fill="#3a2a22"/>
-      <path d="M129 128 q7 7 14 0" fill="none" stroke="#3a2a22" stroke-width="2.5" stroke-linecap="round"/>
-      <circle cx="112" cy="126" r="6" fill="#f59ab0" opacity=".7"/>
-      <circle cx="160" cy="126" r="6" fill="#f59ab0" opacity=".7"/>
-      <!-- corazón -->
-      <path d="M103 50 c-6-10-20-3-13 8 l13 13 13-13 c7-11-7-18-13-8z" fill="#e8436b"/>
-    </svg>
-
-    <div class="botones">
-      <button id="si" type="button">¡Sí!</button>
-      <button id="no" type="button" tabindex="-1">No</button>
+<main class="pantalla">
+  <section id="juego" style="display: grid; gap: 14px;">
+    <div class="caja escena">
+      <p class="etiqueta">★ NUEVA MISIÓN ★</p>
+      <div id="corazon"></div>
+      <div class="barra-titulo"><span id="barraNombre"></span><span id="barraValor">100%</span></div>
+      <div class="barra"><div id="excusas"></div></div>
     </div>
-    <p id="frase" aria-live="polite"></p>
+
+    <div class="caja"><p id="dialogo" aria-live="polite"></p></div>
+
+    <div class="caja menu">
+      <button id="si" type="button">▶ SÍ</button>
+      <button id="no" type="button" tabindex="-1">NO</button>
+    </div>
   </section>
 
-  <section id="final" hidden>
+  <section id="final" class="caja" hidden>
+    <div id="corazonFinal"></div>
     <h1 id="finalTitulo"></h1>
+    <p class="premio" id="finalPremio"></p>
     <p id="finalTexto"></p>
   </section>
 </main>
@@ -145,30 +160,72 @@
 <script>
   // ====== Cambia aquí los textos ======
   const NOMBRE = "Manu";
-  const PREGUNTA = "¿Quieres salir conmigo? ❤️";
-  const FINAL_TITULO = "¡Sabía que dirías que sí! 💖";
-  const FINAL_TEXTO = "Prometo que la vamos a pasar muy bien. Te escribo para cuadrar el día 😊";
+  const PREGUNTA = "¿quieres salir conmigo?";
+  const FINAL_TITULO = "¡MISIÓN CUMPLIDA!";
+  const FINAL_PREMIO = "+1 CITA DESBLOQUEADA";
+  const FINAL_TEXTO = "Sabía que dirías que sí. Te escribo para cuadrar el día.";
+  // Lo que dice el juego cada vez que intenta darle a NO (una por intento)
   const FRASES = [
-    "Vamos, dale una oportunidad",
-    "¿Segura? Piénsalo otra vez 🥺",
-    "Ese botón como que no quiere...",
-    "Mira qué bonito está el verde 👀",
-    "Prometo invitarte a algo rico",
-    "No me voy a rendir tan fácil 😌",
-    "El \"No\" está de vacaciones 🏝️",
-    "Dale al Sí, tú sabes que quieres 💕"
+    "NO usó HUIDA. ¡Es muy eficaz!",
+    "¡Fallaste! NO es demasiado rápido.",
+    "Pista: el botón verde no muerde.",
+    "NO se escondió. ¿Segura que es por ahí?",
+    "Tus excusas se están acabando...",
+    "Bonus: si dices SÍ, invito yo.",
+    "NO está agotado. Ya casi no puede más."
   ];
+  const FRASE_RENDIDO = "¡A NO se le acabaron las excusas! Evolucionó a SÍ.";
   // ====================================
 
   const btnNo = document.getElementById("no");
   const btnSi = document.getElementById("si");
-  const frase = document.getElementById("frase");
+  const dialogo = document.getElementById("dialogo");
+  const excusas = document.getElementById("excusas");
+  const barraValor = document.getElementById("barraValor");
   const DISTANCIA_HUIDA = 90;
+  const INTENTOS_MAX = FRASES.length;
   let intentos = 0;
+  let rendido = false;
+  let destinoNo = null;
+  let ultimoIntento = 0;
+  const PAUSA_ENTRE_FRASES = 1500; // milisegundos mínimos entre una frase y la siguiente
   let puntero = { x: -999, y: -999 };
 
-  document.getElementById("titulo").textContent = NOMBRE ? `${NOMBRE}, ${PREGUNTA.replace(/^¿?./, (m) => m.toLowerCase())}` : PREGUNTA;
-  frase.textContent = FRASES[0];
+  // Corazón pixelado dibujado a partir de una cuadrícula
+  function corazonPixel(color, clase) {
+    const forma = [".XX.XX.", "XXXXXXX", "XXXXXXX", ".XXXXX.", "..XXX..", "...X..."];
+    let rects = "";
+    forma.forEach((fila, y) => [...fila].forEach((c, x) => {
+      if (c === "X") rects += `<rect x="${x}" y="${y}" width="1" height="1"/>`;
+    }));
+    return `<svg class="${clase}" viewBox="0 0 7 6" fill="${color}" shape-rendering="crispEdges" aria-hidden="true">${rects}<rect x="1" y="1" width="1" height="1" fill="#fff" opacity=".7"/></svg>`;
+  }
+
+  // Texto que se escribe letra por letra, como en los juegos viejos
+  let turno = 0;
+  function decir(texto) {
+    const miTurno = ++turno;
+    const letras = [...texto];
+    let i = 0;
+    dialogo.textContent = "";
+    (function paso() {
+      if (miTurno !== turno) return;
+      dialogo.textContent = letras.slice(0, ++i).join("");
+      if (i < letras.length) setTimeout(paso, 26);
+    })();
+  }
+
+  for (let i = 0; i < 45; i++) {
+    const e = document.createElement("i");
+    e.className = "estrella";
+    e.style.left = Math.random() * 100 + "vw";
+    e.style.top = Math.random() * 100 + "vh";
+    e.style.animationDelay = Math.random() * 2.4 + "s";
+    document.body.prepend(e);
+  }
+  document.getElementById("corazon").innerHTML = corazonPixel("#ff5d8f", "corazon-grande");
+  document.getElementById("barraNombre").textContent = `EXCUSAS DE ${NOMBRE || "TI"}`.toUpperCase();
+  decir(`${NOMBRE ? NOMBRE + ", " : ""}${PREGUNTA} ¿Qué vas a hacer?`);
 
   function seSolapan(a, b, margen) {
     return a.left < b.right + margen && a.right > b.left - margen &&
@@ -176,19 +233,19 @@
   }
 
   function huir() {
+    if (rendido) return;
     const r = btnNo.getBoundingClientRect();
 
-    // La primera vez lo saco de la tarjeta para que pueda moverse por toda la pantalla
+    // La primera vez lo saco del menú para que pueda moverse por toda la pantalla
     if (btnNo.parentElement !== document.body) {
       btnNo.style.position = "fixed";
       btnNo.style.left = r.left + "px";
       btnNo.style.top = r.top + "px";
-      btnNo.style.margin = "0";
       document.body.appendChild(btnNo);
       btnNo.getBoundingClientRect(); // fuerza el reflow para que la transición arranque desde aquí
     }
 
-    const margen = 12;
+    const margen = 14;
     const maxX = Math.max(margen, window.innerWidth - r.width - margen);
     const maxY = Math.max(margen, window.innerHeight - r.height - margen);
     const si = btnSi.getBoundingClientRect();
@@ -204,17 +261,37 @@
 
     btnNo.style.left = x + "px";
     btnNo.style.top = y + "px";
+    destinoNo = { left: x, top: y, right: x + r.width, bottom: y + r.height };
+
+    // Un intento solo cuenta si ya hubo tiempo de leer la frase anterior
+    const ahora = Date.now();
+    if (ahora - ultimoIntento < PAUSA_ENTRE_FRASES) return;
+    ultimoIntento = ahora;
 
     intentos++;
-    frase.textContent = FRASES[intentos % FRASES.length];
-    btnSi.style.transform = `scale(${Math.min(1 + intentos * 0.08, 1.6)})`;
+    const restante = Math.max(0, Math.round(100 * (1 - intentos / (INTENTOS_MAX + 1))));
+    excusas.style.width = restante + "%";
+    barraValor.textContent = restante + "%";
+    btnSi.style.transform = `scale(${Math.min(1 + intentos * 0.06, 1.4)})`;
+
+    if (intentos > INTENTOS_MAX) rendirse();
+    else decir(FRASES[intentos - 1]);
+  }
+
+  // Cuando se acaban las excusas, el NO se rinde y se vuelve otro SÍ
+  function rendirse() {
+    rendido = true;
+    btnNo.textContent = "▶ SÍ";
+    btnNo.classList.add("rendido");
+    decir(FRASE_RENDIDO);
   }
 
   // Mouse: huye apenas el puntero se acerca
   document.addEventListener("pointermove", (e) => {
     puntero = { x: e.clientX, y: e.clientY };
     if (e.pointerType === "touch") return;
-    const r = btnNo.getBoundingClientRect();
+    // Mientras se desliza mido contra el destino, para que no huya varias veces seguidas
+    const r = destinoNo || btnNo.getBoundingClientRect();
     const dx = Math.max(r.left - e.clientX, 0, e.clientX - r.right);
     const dy = Math.max(r.top - e.clientY, 0, e.clientY - r.bottom);
     if (Math.hypot(dx, dy) < DISTANCIA_HUIDA) huir();
@@ -222,39 +299,54 @@
 
   // Celular: huye en cuanto lo tocan, antes de que cuente como clic
   btnNo.addEventListener("pointerdown", (e) => {
+    if (rendido) return;
     e.preventDefault();
     puntero = { x: e.clientX, y: e.clientY };
     huir();
   });
-  btnNo.addEventListener("touchstart", (e) => e.preventDefault(), { passive: false });
+  btnNo.addEventListener("touchstart", (e) => { if (!rendido) e.preventDefault(); }, { passive: false });
 
   // Por si acaso llega un clic o el foco del teclado: tampoco se deja
-  btnNo.addEventListener("click", (e) => { e.preventDefault(); huir(); });
-  btnNo.addEventListener("focus", () => { btnNo.blur(); huir(); });
+  btnNo.addEventListener("click", (e) => {
+    if (rendido) return ganar();
+    e.preventDefault();
+    huir();
+  });
+  btnNo.addEventListener("focus", () => { if (!rendido) { btnNo.blur(); huir(); } });
 
   // Si giran el celular o cambian el tamaño, que no quede fuera de la pantalla
   window.addEventListener("resize", () => {
-    if (btnNo.parentElement === document.body) huir();
+    if (btnNo.parentElement !== document.body) return;
+    const r = btnNo.getBoundingClientRect();
+    btnNo.style.left = Math.max(14, Math.min(r.left, window.innerWidth - r.width - 14)) + "px";
+    btnNo.style.top = Math.max(14, Math.min(r.top, window.innerHeight - r.height - 14)) + "px";
+    destinoNo = null;
   });
 
-  btnSi.addEventListener("click", () => {
+  btnSi.addEventListener("click", ganar);
+
+  function ganar() {
+    turno++;
     btnNo.remove();
-    document.getElementById("pregunta").hidden = true;
+    document.getElementById("juego").hidden = true;
+    document.getElementById("juego").style.display = "none";
+    document.getElementById("corazonFinal").innerHTML = corazonPixel("#ff5d8f", "corazon-grande");
     document.getElementById("finalTitulo").textContent = FINAL_TITULO;
+    document.getElementById("finalPremio").textContent = FINAL_PREMIO;
     document.getElementById("finalTexto").textContent = FINAL_TEXTO;
     document.getElementById("final").hidden = false;
     lluviaDeCorazones();
-  });
+  }
 
   function lluviaDeCorazones() {
-    const simbolos = ["❤️", "💖", "💕", "💗", "🌸"];
+    const colores = ["#ff5d8f", "#ffd23f", "#f5f0ff", "#3ddc84"];
     let cantidad = 0;
     const timer = setInterval(() => {
-      const c = document.createElement("span");
-      c.className = "corazon";
-      c.textContent = simbolos[Math.floor(Math.random() * simbolos.length)];
-      c.style.left = Math.random() * 100 + "vw";
-      c.style.fontSize = 16 + Math.random() * 26 + "px";
+      const c = document.createElement("div");
+      c.className = "lluvia";
+      c.innerHTML = corazonPixel(colores[Math.floor(Math.random() * colores.length)], "");
+      c.style.left = Math.random() * 96 + "vw";
+      c.style.width = 14 + Math.random() * 22 + "px";
       c.style.animationDuration = 3 + Math.random() * 3 + "s";
       document.body.appendChild(c);
       c.addEventListener("animationend", () => c.remove());
