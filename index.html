@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Tengo una pregunta 💌</title>
+<style>
+  :root {
+    --fondo: #fde8ee;
+    --tarjeta: #ffffff;
+    --vino: #a3294a;
+    --verde: #2fb344;
+    --rojo: #e03131;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    background: radial-gradient(circle at 50% 30%, #fff5f8, var(--fondo));
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    color: var(--vino);
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tarjeta {
+    width: min(420px, 100%);
+    background: var(--tarjeta);
+    border-radius: 18px;
+    padding: 32px 24px 28px;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(163, 41, 74, .18);
+  }
+  h1 {
+    margin: 0 0 20px;
+    font-size: clamp(1.4rem, 6vw, 1.8rem);
+    line-height: 1.25;
+  }
+  .dibujo {
+    width: 170px;
+    max-width: 60%;
+    border-radius: 12px;
+    display: block;
+    margin: 0 auto 24px;
+  }
+  .botones {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    min-height: 52px;
+  }
+  button {
+    border: 0;
+    border-radius: 999px;
+    padding: 12px 26px;
+    font: inherit;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff;
+    cursor: pointer;
+    touch-action: manipulation;
+    user-select: none;
+  }
+  #si {
+    background: var(--verde);
+    box-shadow: 0 4px 0 #23882f;
+    transition: transform .25s ease;
+  }
+  #si:active { box-shadow: 0 1px 0 #23882f; }
+  #no {
+    background: var(--rojo);
+    box-shadow: 0 4px 0 #a61e1e;
+    transition: left .22s ease-out, top .22s ease-out;
+    z-index: 10;
+  }
+  #frase {
+    margin: 18px 0 0;
+    min-height: 1.4em;
+    font-size: .95rem;
+  }
+  #final h1 { margin-bottom: 12px; }
+  #final p { margin: 0; font-size: 1.05rem; line-height: 1.5; }
+  .corazon {
+    position: fixed;
+    top: -40px;
+    pointer-events: none;
+    animation: caer linear forwards;
+  }
+  @keyframes caer {
+    to { transform: translateY(110vh) rotate(360deg); opacity: .2; }
+  }
+</style>
+</head>
+<body>
+
+<main class="tarjeta">
+  <section id="pregunta">
+    <h1 id="titulo"></h1>
+
+    <!-- Para usar tu propia imagen o GIF, cambia este <svg> por: <img class="dibujo" src="tu-imagen.gif" alt=""> -->
+    <svg class="dibujo" viewBox="0 0 200 200" role="img" aria-label="Un osito y un panda juntos">
+      <rect width="200" height="200" fill="#c9b6f2"/>
+      <!-- osito -->
+      <circle cx="42" cy="78" r="15" fill="#c98a56"/>
+      <circle cx="98" cy="78" r="15" fill="#c98a56"/>
+      <circle cx="70" cy="112" r="42" fill="#d9a06c"/>
+      <ellipse cx="70" cy="124" rx="17" ry="13" fill="#f6dcc0"/>
+      <circle cx="55" cy="106" r="4.5" fill="#3a2a22"/>
+      <circle cx="85" cy="106" r="4.5" fill="#3a2a22"/>
+      <ellipse cx="70" cy="118" rx="5" ry="3.5" fill="#3a2a22"/>
+      <path d="M63 126 q7 7 14 0" fill="none" stroke="#3a2a22" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="46" cy="120" r="6" fill="#f59ab0" opacity=".7"/>
+      <!-- panda -->
+      <circle cx="108" cy="80" r="15" fill="#3a2a22"/>
+      <circle cx="164" cy="80" r="15" fill="#3a2a22"/>
+      <circle cx="136" cy="114" r="42" fill="#ffffff"/>
+      <ellipse cx="121" cy="108" rx="9" ry="11" fill="#3a2a22"/>
+      <ellipse cx="151" cy="108" rx="9" ry="11" fill="#3a2a22"/>
+      <circle cx="122" cy="107" r="3" fill="#fff"/>
+      <circle cx="150" cy="107" r="3" fill="#fff"/>
+      <ellipse cx="136" cy="121" rx="4.5" ry="3" fill="#3a2a22"/>
+      <path d="M129 128 q7 7 14 0" fill="none" stroke="#3a2a22" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="112" cy="126" r="6" fill="#f59ab0" opacity=".7"/>
+      <circle cx="160" cy="126" r="6" fill="#f59ab0" opacity=".7"/>
+      <!-- corazón -->
+      <path d="M103 50 c-6-10-20-3-13 8 l13 13 13-13 c7-11-7-18-13-8z" fill="#e8436b"/>
+    </svg>
+
+    <div class="botones">
+      <button id="si" type="button">¡Sí!</button>
+      <button id="no" type="button" tabindex="-1">No</button>
+    </div>
+    <p id="frase" aria-live="polite"></p>
+  </section>
+
+  <section id="final" hidden>
+    <h1 id="finalTitulo"></h1>
+    <p id="finalTexto"></p>
+  </section>
+</main>
+
+<script>
+  // ====== Cambia aquí los textos ======
+  const NOMBRE = "Manu";
+  const PREGUNTA = "¿Quieres salir conmigo? ❤️";
+  const FINAL_TITULO = "¡Sabía que dirías que sí! 💖";
+  const FINAL_TEXTO = "Prometo que la vamos a pasar muy bien. Te escribo para cuadrar el día 😊";
+  const FRASES = [
+    "Vamos, dale una oportunidad",
+    "¿Segura? Piénsalo otra vez 🥺",
+    "Ese botón como que no quiere...",
+    "Mira qué bonito está el verde 👀",
+    "Prometo invitarte a algo rico",
+    "No me voy a rendir tan fácil 😌",
+    "El \"No\" está de vacaciones 🏝️",
+    "Dale al Sí, tú sabes que quieres 💕"
+  ];
+  // ====================================
+
+  const btnNo = document.getElementById("no");
+  const btnSi = document.getElementById("si");
+  const frase = document.getElementById("frase");
+  const DISTANCIA_HUIDA = 90;
+  let intentos = 0;
+  let puntero = { x: -999, y: -999 };
+
+  document.getElementById("titulo").textContent = NOMBRE ? `${NOMBRE}, ${PREGUNTA.replace(/^¿?./, (m) => m.toLowerCase())}` : PREGUNTA;
+  frase.textContent = FRASES[0];
+
+  function seSolapan(a, b, margen) {
+    return a.left < b.right + margen && a.right > b.left - margen &&
+           a.top < b.bottom + margen && a.bottom > b.top - margen;
+  }
+
+  function huir() {
+    const r = btnNo.getBoundingClientRect();
+
+    // La primera vez lo saco de la tarjeta para que pueda moverse por toda la pantalla
+    if (btnNo.parentElement !== document.body) {
+      btnNo.style.position = "fixed";
+      btnNo.style.left = r.left + "px";
+      btnNo.style.top = r.top + "px";
+      btnNo.style.margin = "0";
+      document.body.appendChild(btnNo);
+      btnNo.getBoundingClientRect(); // fuerza el reflow para que la transición arranque desde aquí
+    }
+
+    const margen = 12;
+    const maxX = Math.max(margen, window.innerWidth - r.width - margen);
+    const maxY = Math.max(margen, window.innerHeight - r.height - margen);
+    const si = btnSi.getBoundingClientRect();
+    let x = margen, y = margen;
+
+    for (let i = 0; i < 60; i++) {
+      x = margen + Math.random() * (maxX - margen);
+      y = margen + Math.random() * (maxY - margen);
+      const destino = { left: x, top: y, right: x + r.width, bottom: y + r.height };
+      const lejosDelPuntero = Math.hypot(x + r.width / 2 - puntero.x, y + r.height / 2 - puntero.y) > 170;
+      if (lejosDelPuntero && !seSolapan(destino, si, 16)) break;
+    }
+
+    btnNo.style.left = x + "px";
+    btnNo.style.top = y + "px";
+
+    intentos++;
+    frase.textContent = FRASES[intentos % FRASES.length];
+    btnSi.style.transform = `scale(${Math.min(1 + intentos * 0.08, 1.6)})`;
+  }
+
+  // Mouse: huye apenas el puntero se acerca
+  document.addEventListener("pointermove", (e) => {
+    puntero = { x: e.clientX, y: e.clientY };
+    if (e.pointerType === "touch") return;
+    const r = btnNo.getBoundingClientRect();
+    const dx = Math.max(r.left - e.clientX, 0, e.clientX - r.right);
+    const dy = Math.max(r.top - e.clientY, 0, e.clientY - r.bottom);
+    if (Math.hypot(dx, dy) < DISTANCIA_HUIDA) huir();
+  });
+
+  // Celular: huye en cuanto lo tocan, antes de que cuente como clic
+  btnNo.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    puntero = { x: e.clientX, y: e.clientY };
+    huir();
+  });
+  btnNo.addEventListener("touchstart", (e) => e.preventDefault(), { passive: false });
+
+  // Por si acaso llega un clic o el foco del teclado: tampoco se deja
+  btnNo.addEventListener("click", (e) => { e.preventDefault(); huir(); });
+  btnNo.addEventListener("focus", () => { btnNo.blur(); huir(); });
+
+  // Si giran el celular o cambian el tamaño, que no quede fuera de la pantalla
+  window.addEventListener("resize", () => {
+    if (btnNo.parentElement === document.body) huir();
+  });
+
+  btnSi.addEventListener("click", () => {
+    btnNo.remove();
+    document.getElementById("pregunta").hidden = true;
+    document.getElementById("finalTitulo").textContent = FINAL_TITULO;
+    document.getElementById("finalTexto").textContent = FINAL_TEXTO;
+    document.getElementById("final").hidden = false;
+    lluviaDeCorazones();
+  });
+
+  function lluviaDeCorazones() {
+    const simbolos = ["❤️", "💖", "💕", "💗", "🌸"];
+    let cantidad = 0;
+    const timer = setInterval(() => {
+      const c = document.createElement("span");
+      c.className = "corazon";
+      c.textContent = simbolos[Math.floor(Math.random() * simbolos.length)];
+      c.style.left = Math.random() * 100 + "vw";
+      c.style.fontSize = 16 + Math.random() * 26 + "px";
+      c.style.animationDuration = 3 + Math.random() * 3 + "s";
+      document.body.appendChild(c);
+      c.addEventListener("animationend", () => c.remove());
+      if (++cantidad > 90) clearInterval(timer);
+    }, 120);
+  }
+</script>
+</body>
+</html>
